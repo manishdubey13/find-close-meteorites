@@ -2,26 +2,6 @@ import requests
 import math
 
 
-res=requests.get("http://nasa.gov")
-
-print(res.status_code)
-
-text = res.text
-
-#print(text)
-
-print(len(text))
-
-meteors_res=requests.get("https://data.nasa.gov/resource/gh4g-9sfh.json")
-meteors_data = meteors_res.json()
-print(type(meteors_data))
-print(meteors_data[0])
-
-####https://www.findlatitudeandlongitude.com/
-#####https://www.geeksforgeeks.org/program-distance-two-points-earth/#:~:text=For%20this%20divide%20the%20values,is%20the%20radius%20of%20Earth.
-##Distance betweemn two points give there latitude and longitude
-# Haversine formula
-
 
 def calc_distance(lat1,log1,lat2,log2):
     lat1=math.radians(lat1)
@@ -32,6 +12,32 @@ def calc_distance(lat1,log1,lat2,log2):
     h=math.sin((lat2-lat1)/2)**2 + math.cos(lat1)*math.cos(lat2)*math.sin((log2-log1)/2)**2
 
     return 6372.8 * 2 *math.asin(math.sqrt(h))
+
+def get_distance(meteor):
+    return meteor.get('distance',math.inf)
+
+res=requests.get("http://nasa.gov")
+
+#print(res.status_code)
+
+text = res.text
+
+#print(text)
+
+#print(len(text))
+
+meteors_res=requests.get("https://data.nasa.gov/resource/gh4g-9sfh.json")
+meteors_data = meteors_res.json()
+
+# print(type(meteors_data))
+# print(meteors_data[0])
+
+####https://www.findlatitudeandlongitude.com/
+#####https://www.geeksforgeeks.org/program-distance-two-points-earth/#:~:text=For%20this%20divide%20the%20values,is%20the%20radius%20of%20Earth.
+##Distance betweemn two points give there latitude and longitude
+# Haversine formula
+
+
 
 my_location =(22.095598,79.556060)
 
@@ -45,8 +51,7 @@ for meteor in meteors_data:
 
 
 # print("Before  sort" + str(meteors_data[0]) )
-def get_distance(meteor):
-    return meteor.get('distance',math.inf)
+
 
 meteors_data.sort(key=get_distance)
 
